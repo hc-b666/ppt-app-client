@@ -1,12 +1,12 @@
+import socket from "./socket";
+
 type PptId = {
   presentationId: string;
 };
 
-export default function EnterPptId({
-  handleEnterPresentation,
-}: {
-  handleEnterPresentation: (presentationId: string) => void;
-}) {
+export default function EnterPptId({}: {}) {
+  const nickname = localStorage.getItem("nickname");
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -14,7 +14,17 @@ export default function EnterPptId({
       new FormData(e.currentTarget).entries()
     ) as PptId;
 
-    handleEnterPresentation(data.presentationId);
+    socket.emit("joinPresentation", data.presentationId, nickname);
+
+    socket.on("presentationJoined", (res) => {
+      if (res.success) {
+        console.log(res);
+        console.log("Presentation joined successfully:", res.presentation);
+        localStorage.setItem("pptId", res.presentation._id);
+      } else {
+        console.error("Error joining presentation:", res.error);
+      }
+    });
   };
 
   return (

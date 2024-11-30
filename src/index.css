@@ -5,3 +5,7 @@
 button {
   @apply border py-1 px-2 rounded;
 }
+
+textarea {
+  resize: none;
+}
