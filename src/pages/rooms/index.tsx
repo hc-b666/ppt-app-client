@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import socket from "./socket";
+import socket from "@/constants/socket";
+import { useAppSelector } from "@/app/store";
 
-export function App() {
+export default function RoomsPage() {
   const [status, setStatus] = useState("disconnected");
+  const nickname = useAppSelector((state) => state.user.nickname);
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -13,8 +15,7 @@ export function App() {
 
   return (
     <div>
-      <div className="text-2xl">Status: {status}</div>
+      <div>Rooms page {status} {nickname}</div>
     </div>
   );
 }
-
