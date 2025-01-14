@@ -14,8 +14,8 @@ export default function RoomsPage() {
   }, [socket]);
 
   return (
-    <div>
-      <div>Rooms page {status} {nickname}</div>
-    </div>
+    <main className="w-full h-screen flex flex-col items-center justify-center gap-8">
+      <h1 className="text-2xl font-bold">{status}{nickname}</h1>
+    </main>
   );
 }

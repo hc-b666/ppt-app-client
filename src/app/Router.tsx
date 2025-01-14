@@ -5,6 +5,7 @@ import RouteGuard from "./RouteGuard";
 const Homepage = lazy(() => import("@/pages/home"));
 const NicknamePage = lazy(() => import("@/pages/nickname"));
 const RoomsPage = lazy(() => import("@/pages/rooms"));
+const CreatePresentationPage = lazy(() => import("@/pages/create-ppt"));
 
 export default function Router() {
   return (
@@ -19,10 +20,14 @@ export default function Router() {
             <RouteGuard>
               <Routes>
                 <Route path="/" element={<RoomsPage />} />
+                <Route path="/create" element={<CreatePresentationPage />} />
+                <Route path="*" element={<div>Page not found</div>} />
               </Routes>
             </RouteGuard>
           }
         />
+
+        <Route path="*" element={<div>Page not found</div>} />
       </Routes>
     </Suspense>
   );

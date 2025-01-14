@@ -12,6 +12,8 @@ import {
 import storage from "redux-persist/lib/storage";
 import { useDispatch, useSelector } from "react-redux";
 
+import { api } from "@/common/services/api";
+
 import userReducer from "@/features/user/userSlice";
 
 const persistConfig = {
@@ -23,6 +25,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   user: userReducer,
+  [api.reducerPath]: api.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -34,7 +37,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat(api.middleware),
 });
 
 export const persistor = persistStore(store);

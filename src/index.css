@@ -8,3 +8,6 @@
   }
 }
 
+textarea {
+  @apply resize-none;
+}
