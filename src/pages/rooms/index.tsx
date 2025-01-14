@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import socket from "@/constants/socket";
+import socket from "@/common/constants/socket";
 import { useAppSelector } from "@/app/store";
 
 export default function RoomsPage() {

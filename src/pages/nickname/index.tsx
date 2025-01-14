@@ -1,9 +1,9 @@
+import NicknameForm from "@/features/user/NicknameForm";
+
 export default function NicknamePage() {
   return (
-    <div>
-      <div>
-        enter your nickname page
-      </div>
+    <div className="w-full h-screen flex items-center justify-center">
+      <NicknameForm />
     </div>
   );
 }
