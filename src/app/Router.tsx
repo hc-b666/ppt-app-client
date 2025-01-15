@@ -6,6 +6,7 @@ const Homepage = lazy(() => import("@/pages/home"));
 const NicknamePage = lazy(() => import("@/pages/nickname"));
 const RoomsPage = lazy(() => import("@/pages/rooms"));
 const CreatePresentationPage = lazy(() => import("@/pages/create-ppt"));
+const PresentationPage = lazy(() => import("@/pages/presentation"));
 
 export default function Router() {
   return (
@@ -21,6 +22,10 @@ export default function Router() {
               <Routes>
                 <Route path="/" element={<RoomsPage />} />
                 <Route path="/create" element={<CreatePresentationPage />} />
+                <Route
+                  path="/presentations/:id"
+                  element={<PresentationPage />}
+                />
                 <Route path="*" element={<div>Page not found</div>} />
               </Routes>
             </RouteGuard>

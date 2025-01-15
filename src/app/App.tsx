@@ -1,10 +1,12 @@
+import Navbar from "@/common/components/core/Navbar";
 import Router from "./Router";
 
 export function App() {
   return (
-    <main>
+    <div className="w-full min-h-screen flex flex-col">
+      <Navbar />
       <Router />
-    </main>
+    </div>
   );
 }
 

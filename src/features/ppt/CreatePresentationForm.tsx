@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { useAppSelector } from "@/app/store";
 import { useCreatePresentationMutation } from "./presentationService";
@@ -12,6 +13,7 @@ interface CreatePresentationBody {
 }
 
 export default function CreatePresentationForm() {
+  const navigate = useNavigate();
   const nickname = useAppSelector((state) => state.user.nickname);
   const [create, { isLoading }] = useCreatePresentationMutation();
   const {
@@ -32,7 +34,7 @@ export default function CreatePresentationForm() {
         description: data.description,
         author: nickname,
       }).unwrap();
-
+      navigate("/main");
       console.log(res);
     } catch (err) {
       console.log("CreatePresentationForm onSubmit()", err);

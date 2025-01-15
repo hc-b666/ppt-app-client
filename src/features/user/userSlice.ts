@@ -11,6 +11,9 @@ const initialState: UserState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
+  selectors: {
+    selectNickname: (state) => state.nickname,
+  },
   reducers: {
     setNickname(state, action: PayloadAction<string>) {
       state.nickname = action.payload;
@@ -18,5 +21,6 @@ const userSlice = createSlice({
   },
 });
 
+export const { selectNickname } = userSlice.selectors;
 export const { setNickname } = userSlice.actions;
 export default userSlice.reducer;
