@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { useAppSelector } from "@/app/store";
 import { useCreatePresentationMutation } from "./presentationService";
+import { toast } from "@/common/hooks/use-toast";
 import { Label } from "@/common/components/ui/label";
 import { Input } from "@/common/components/ui/input";
 import { Textarea } from "@/common/components/ui/textarea";
@@ -24,7 +25,7 @@ export default function CreatePresentationForm() {
 
   const onSubmit: SubmitHandler<CreatePresentationBody> = async (data) => {
     if (!nickname) {
-      alert("You have to set nickname to create presentation");
+      toast({ description: "You have to set nickname to create presentation" });
       return;
     }
 
@@ -34,10 +35,13 @@ export default function CreatePresentationForm() {
         description: data.description,
         author: nickname,
       }).unwrap();
-      navigate("/main");
-      console.log(res);
+      navigate(
+        `/main/presentations/${res.data.presentationId}?authorToken=${res.data.authorToken}`
+      );
+      toast({ description: res.message });
     } catch (err) {
       console.log("CreatePresentationForm onSubmit()", err);
+      toast({ variant: "destructive", description: "Something went wrong" });
     }
   };
 

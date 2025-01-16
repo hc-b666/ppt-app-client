@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@/app/store";
-import { selectNickname } from "../user/userSlice";
+import { selectNickname } from "./userSlice";
 import socket from "@/common/constants/socket";
-
-interface UserInfo {
-  socketId: string;
-  nickname: string;
-}
 
 interface Props {
   pptId: string | undefined;
@@ -14,7 +9,7 @@ interface Props {
 
 export default function useJoinPresentation({ pptId }: Props) {
   const [status, setStatus] = useState("disconnected");
-  const [users, setUsers] = useState<UserInfo[]>([]);
+  const [users, setUsers] = useState<OnlineUserInfo[]>([]);
   const nickname = useAppSelector((state) => selectNickname(state));
 
   useEffect(() => {
@@ -23,9 +18,7 @@ export default function useJoinPresentation({ pptId }: Props) {
     const onConnect = () => {
       console.log("connected to server");
       setStatus("connected");
-      if (pptId) {
-        socket.emit("join-ppt", pptId, nickname);
-      }
+      socket.emit("join-ppt", pptId, nickname);
     };
 
     const onDisconnect = () => {
@@ -34,14 +27,24 @@ export default function useJoinPresentation({ pptId }: Props) {
       setUsers([]);
     };
 
-    const newUser = ({ users, joinedUser }: { users: UserInfo[], joinedUser: UserInfo }) => {
-      console.log(users);
+    const newUser = ({
+      users,
+      joinedUser,
+    }: {
+      users: OnlineUserInfo[];
+      joinedUser: OnlineUserInfo;
+    }) => {
       console.log(joinedUser);
       setUsers(users);
     };
 
-    const leftUser = ({ users, leftUser }: { users: UserInfo[], leftUser: UserInfo }) => {
-      console.log(users);
+    const leftUser = ({
+      users,
+      leftUser,
+    }: {
+      users: OnlineUserInfo[];
+      leftUser: OnlineUserInfo;
+    }) => {
       console.log(leftUser);
       setUsers(users);
     };
@@ -54,9 +57,7 @@ export default function useJoinPresentation({ pptId }: Props) {
     socket.connect();
 
     return () => {
-      if (pptId) {
-        socket.emit("leave-ppt", pptId);
-      }
+      socket.emit("leave-ppt", pptId);
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
       socket.off("new-user-joined", newUser);

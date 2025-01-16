@@ -8,6 +8,7 @@ export default function Navbar() {
         PPT
       </NavLink>
       <div className="flex items-center gap-5">
+        <NavLink to="/main">Main</NavLink>
         <NavLink to="/main/create">Create Presentation</NavLink>
         <Nickname />
       </div>

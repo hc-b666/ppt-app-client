@@ -15,16 +15,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { api } from "@/common/services/api";
 
 import userReducer from "@/features/user/userSlice";
+import presentationsReducer from "@/features/ppt/presentationsSlice";
 
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  whitelist: ["user"],
+  whitelist: ["user", "presentations"],
 };
 
 const rootReducer = combineReducers({
   user: userReducer,
+  presentations: presentationsReducer,
   [api.reducerPath]: api.reducer,
 });
 

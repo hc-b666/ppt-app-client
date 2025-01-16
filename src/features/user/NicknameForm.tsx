@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/app/store";
 import { setNickname } from "./userSlice";
 import useFocus from "@/common/hooks/useFocus";
@@ -8,6 +9,7 @@ import { Label } from "@/common/components/ui/label";
 
 export default function NicknameForm() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const nicknameInputRef = useRef<HTMLInputElement | null>(null);
 
   useFocus(nicknameInputRef);
@@ -22,6 +24,8 @@ export default function NicknameForm() {
     }
 
     dispatch(setNickname(nicknameInputRef.current.value.trim()));
+
+    navigate("/main");
 
     nicknameInputRef.current.value = "";
   }

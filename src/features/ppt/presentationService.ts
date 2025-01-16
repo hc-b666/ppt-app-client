@@ -1,12 +1,22 @@
 import { api } from "@/common/services/api";
 
-interface CreateRequestBody {
+interface CreateRequest {
   title: string;
   description?: string;
   author: string;
 }
 
-const pptApi = api.injectEndpoints({
+interface CreateResponse extends Response {
+  data: PresentationAuthorClaim;
+}
+
+interface UpdateTitleRequest {
+  pptId: string;
+  title: string;
+  authorToken: String;
+}
+
+export const pptApi = api.injectEndpoints({
   endpoints: (builder) => ({
     findAllPresentations: builder.query<Presentation[], void>({
       query: () => ({
@@ -19,13 +29,22 @@ const pptApi = api.injectEndpoints({
         url: `/presentations/${id}`,
         method: "GET",
       }),
+      providesTags: ["Presentation"],
     }),
-    createPresentation: builder.mutation<Response, CreateRequestBody>({
+    createPresentation: builder.mutation<CreateResponse, CreateRequest>({
       query: (body) => ({
         url: "/presentations/create",
         method: "POST",
         body,
       }),
+    }),
+    updateTitle: builder.mutation<Response, UpdateTitleRequest>({
+      query: ({ pptId, title, authorToken }) => ({
+        url: `/presentations/edit-title/${pptId}?authorToken=${authorToken}`,
+        method: "PUT",
+        body: { title },
+      }),
+      invalidatesTags: ["Presentation"],
     }),
   }),
 });
@@ -34,4 +53,5 @@ export const {
   useFindAllPresentationsQuery,
   useFindByIdQuery,
   useCreatePresentationMutation,
+  useUpdateTitleMutation,
 } = pptApi;
