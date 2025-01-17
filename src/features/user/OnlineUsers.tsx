@@ -1,11 +1,8 @@
-import { useParams } from "react-router-dom";
 import useJoinPresentation from "./useJoinPresentation";
 import { Wifi, WifiOff } from "lucide-react";
 
 export default function OnlineUsers() {
-  const { id } = useParams();
-
-  const { status, users } = useJoinPresentation({ pptId: id });
+  const { status, users } = useJoinPresentation();
 
   const statusIcon = status ? (
     <div title="Connected">
@@ -25,7 +22,7 @@ export default function OnlineUsers() {
       </div>
       <div className="flex flex-col gap-1">
         {users.map((u) => (
-          <span key={u.socketId}>{u.nickname}</span>
+          <span key={u.socketId}>{u.nickname} ({u.role})</span>
         ))}
       </div>
     </div>

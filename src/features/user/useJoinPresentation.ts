@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useAppSelector } from "@/app/store";
 import { selectNickname } from "./userSlice";
 import socket from "@/common/constants/socket";
+import useVerifyAuthor from "../ppt/useVerifyAuthor";
+import { selectAuthorToken } from "../ppt/presentationsSlice";
 
-interface Props {
-  pptId: string | undefined;
-}
-
-export default function useJoinPresentation({ pptId }: Props) {
+export default function useJoinPresentation() {
+  const { id: pptId } = useParams();
   const [status, setStatus] = useState("disconnected");
   const [users, setUsers] = useState<OnlineUserInfo[]>([]);
   const nickname = useAppSelector((state) => selectNickname(state));
+  const isAuthor = useVerifyAuthor();
+  const authorToken = useAppSelector((state) =>
+    selectAuthorToken(state, pptId)
+  );
 
   useEffect(() => {
     if (!pptId) return;
@@ -18,7 +22,12 @@ export default function useJoinPresentation({ pptId }: Props) {
     const onConnect = () => {
       console.log("connected to server");
       setStatus("connected");
-      socket.emit("join-ppt", pptId, nickname);
+      socket.emit("join-ppt", {
+        pptId,
+        nickname,
+        role: isAuthor ? "author" : "viewer",
+        authorToken,
+      });
     };
 
     const onDisconnect = () => {
@@ -27,25 +36,11 @@ export default function useJoinPresentation({ pptId }: Props) {
       setUsers([]);
     };
 
-    const newUser = ({
-      users,
-      joinedUser,
-    }: {
-      users: OnlineUserInfo[];
-      joinedUser: OnlineUserInfo;
-    }) => {
-      console.log(joinedUser);
+    const newUser = ({ users }: { users: OnlineUserInfo[] }) => {
       setUsers(users);
     };
 
-    const leftUser = ({
-      users,
-      leftUser,
-    }: {
-      users: OnlineUserInfo[];
-      leftUser: OnlineUserInfo;
-    }) => {
-      console.log(leftUser);
+    const leftUser = ({ users }: { users: OnlineUserInfo[] }) => {
       setUsers(users);
     };
 
