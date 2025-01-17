@@ -1,5 +1,10 @@
 import { api } from "@/common/services/api";
 
+interface VerifyAuthorRequest {
+  pptId: string;
+  authorToken: string;
+}
+
 interface CreateRequest {
   title: string;
   description?: string;
@@ -18,6 +23,13 @@ interface UpdateTitleRequest {
 
 export const pptApi = api.injectEndpoints({
   endpoints: (builder) => ({
+    verifyAuthor: builder.mutation<{ isAuthor: boolean }, VerifyAuthorRequest>({
+      query: ({ pptId, authorToken }) => ({
+        url: `/presentations/${pptId}/verify-author`,
+        method: "POST",
+        body: { authorToken },
+      }),
+    }),
     findAllPresentations: builder.query<Presentation[], void>({
       query: () => ({
         url: "/presentations",
@@ -40,7 +52,7 @@ export const pptApi = api.injectEndpoints({
     }),
     updateTitle: builder.mutation<Response, UpdateTitleRequest>({
       query: ({ pptId, title, authorToken }) => ({
-        url: `/presentations/edit-title/${pptId}?authorToken=${authorToken}`,
+        url: `/presentations/${pptId}/edit-title?authorToken=${authorToken}`,
         method: "PUT",
         body: { title },
       }),
@@ -50,6 +62,7 @@ export const pptApi = api.injectEndpoints({
 });
 
 export const {
+  useVerifyAuthorMutation,
   useFindAllPresentationsQuery,
   useFindByIdQuery,
   useCreatePresentationMutation,

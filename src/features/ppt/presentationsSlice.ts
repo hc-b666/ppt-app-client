@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { pptApi } from "./presentationService";
 
 interface PresentationsState {
@@ -20,7 +20,16 @@ const presentationsSlice = createSlice({
       return ppt.authorToken;
     },
   },
-  reducers: {},
+  reducers: {
+    addClaim(state, action: PayloadAction<PresentationAuthorClaim>) {
+      const existing = state.presentations.find(
+        (ppt) => ppt.presentationId === action.payload.presentationId
+      );
+      if (!existing) {
+        state.presentations.push(action.payload);
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder.addMatcher(
       pptApi.endpoints.createPresentation.matchFulfilled,
@@ -32,5 +41,5 @@ const presentationsSlice = createSlice({
 });
 
 export const { selectAuthorToken } = presentationsSlice.selectors;
-export const {} = presentationsSlice.actions;
+export const { addClaim } = presentationsSlice.actions;
 export default presentationsSlice.reducer;
